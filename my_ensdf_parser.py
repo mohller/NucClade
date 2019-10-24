@@ -14,6 +14,7 @@
 
 END_RECORD = 80 * u' ' + u'\n'
 
+import numpy as np
 from warnings import warn
 
 def is_dataset(string):
@@ -64,6 +65,28 @@ def classify_record(record_string):
 
     return record_type
 
+def classify_dataset(dataset_object):
+    """Datasets can be classified into 5 types according to the 
+       information they present (see ENSDF manual page 3). Here
+       those types are tagged as:
+       [
+           'SUMMARY_INFOS',
+           'THE_REFERENCE',
+           'ADOPTED_LINES',
+           'EVALUATED_DAT',
+           'COMBINED_VALS'
+        ]
+    """
+    rtypes = []
+    dataset_type = 'OTHER'
+    for r in dataset_object.records[1:-1]:
+        rtypes.append(r.type)
+    
+    if np.all(np.array(rtypes) == 'REFERENCE'):
+        dataset_type = 'THE_REFERENCE'
+    
+    return dataset_type
+
 
 class record_group(object):
     """A class to represent a group of records which
@@ -85,6 +108,7 @@ class record_group(object):
         if self.type != 'END':
             self.A = int(self.A)
 
+
 class dataset(object):
     """A class that represents the datasets contained in ENSDF
     """
@@ -94,6 +118,17 @@ class dataset(object):
         should be composed of 2 or more lines (referred to as 
         `records` in the ENSDF manual. Populates the class members
         according to the information in dataset_string
+
+        Datasets can be classified into 5 types according to the 
+        information they present (see ENSDF manual page 3). Here
+        those types are tagged as:
+        [
+            'SUMMARY_INFOS',
+            'THE_REFERENCE',
+            'ADOPTED_LINES',
+            'EVALUATED_DAT',
+            'COMBINED_VALS'
+        ]
 
         Arguments:
         ---------
@@ -129,9 +164,13 @@ class dataset(object):
                 self.records.append(record_group(prev_record, recordstype=prev_type))
                 prev_type = new_type
                 prev_record = new_record                
+        self.type = classify_dataset(self)
 
 
 class ensdf_file(object):
+    """A class to represent and contain the information of
+    a file in the format of ENSDF. 
+    """
     def __init__(self, ensdfname):
             code_name = 'utf-8'  # closest to ASCII-7 used in ENSDF, python3
 
@@ -152,11 +191,21 @@ class ensdf_file(object):
 
 
 if __name__ == "__main__":    
-
+    folder = '/home/visitante/decay_tools/ENSDF/'
     ef = ensdf_file('ensdf.039')
-    for k, ds in enumerate(ef.datasets):
-        print('-------------- dataset {}:'.format(k))
-        for rec in ds.records:
-            print(rec.type)
-
+    import numpy as np
+    for k in range(1, 299):
+        filename = 'ensdf.{:0>3d}'.format(k)
+        ef = ensdf_file(folder + filename)
+    # for k, ds in enumerate(ef.datasets):
+    #     for rec in ds.records:
+    #         print(rec.A, rec.elem, rec.type)
+        if len(ef.datasets) > 1:
+            # rtypes = np.array([r.type for r in ef.datasets[1].records[1:-1]])
+            print(ef.datasets[1].type)
+        else:
+            continue
+        
+        # if not np.all(rtypes == 'REFERENCE'):
+        #     print(filename, np.all(rtypes == 'REFERENCE'))
 
