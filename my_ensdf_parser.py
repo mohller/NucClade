@@ -13,10 +13,26 @@
 #    - ... to a specific nuclide, where 'datasets' are either: comments, adopted data, or (type 4 or 5)
 
 END_RECORD = 80 * u' ' + u'\n'
+DECAY_MODES = ['A', 'B+', '2B+', 'B+A', 'B+P', 'B+2P', 'B+3P',
+               'B-', '2B-', 'B-A', 'B-N', 'B-2N', 'B-P', 
+               'EC', '2EC', 'ECP', 'EC2P', 'ECA', 'EC3P', 'IT', 
+               'N', '2N', 'P', '2P', 'SF', '14C']
 
 import numpy as np
 from warnings import warn
 
+def dismember(string, markers, names=None):
+    """Decompose string into size-limited fragments
+    and returns them separately
+
+    string: string to separate into substrings
+    """
+
+    if markers is None:
+        return string
+    else:
+        pass
+        
 def is_dataset(string):
     """Checks whether string complies with dataset structure expected
     according to ENSDF manual
@@ -107,6 +123,16 @@ class record_group(object):
 
         if self.type != 'END':
             self.A = int(self.A)
+        
+        self._populate_data()
+
+    def _populate_data(self):
+        # extracting data based on type
+        if self.type == 'IDENTIFICATION':
+            self.DSID = self.record_raw[9:39]  # Dataset Identification
+            self.DSREF = self.record_raw[39:65]  # References
+            self.PUB = self.record_raw[65:74]  # Publication Information
+            self.DATE = self.record_raw[75:80]  # Publication Information                
 
 
 class dataset(object):
@@ -164,7 +190,10 @@ class dataset(object):
                 self.records.append(record_group(prev_record, recordstype=prev_type))
                 prev_type = new_type
                 prev_record = new_record                
-        self.type = classify_dataset(self)
+        
+        # self.type = classify_dataset(self)
+        if 'DECAY' in self.records[0].DSID:
+            self.type = 'DECAY'
 
 
 class ensdf_file(object):
@@ -194,18 +223,17 @@ if __name__ == "__main__":
     folder = '/home/visitante/decay_tools/ENSDF/'
     ef = ensdf_file('ensdf.039')
     import numpy as np
+    import periodictable as ptb
+
+    modes = []
+    data = DECAY_MODES
     for k in range(1, 299):
         filename = 'ensdf.{:0>3d}'.format(k)
         ef = ensdf_file(folder + filename)
-    # for k, ds in enumerate(ef.datasets):
-    #     for rec in ds.records:
-    #         print(rec.A, rec.elem, rec.type)
-        if len(ef.datasets) > 1:
-            # rtypes = np.array([r.type for r in ef.datasets[1].records[1:-1]])
-            print(ef.datasets[1].type)
-        else:
-            continue
-        
-        # if not np.all(rtypes == 'REFERENCE'):
-        #     print(filename, np.all(rtypes == 'REFERENCE'))
 
+        for ds in ef.datasets:
+            if ds.type == "DECAY":
+                nuclide, mode, _,  = ds.records[0].DSID.split(u' ')[1]
+                if mode not in DECAY_MODES:
+                    modes.append(m)
+    print(modes)

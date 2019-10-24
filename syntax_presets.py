@@ -12,10 +12,20 @@ RECORD_MEMBERS = {
         'DATE'  : [75, 80],
     }
     'HISTORY'                  : {
-        'NUCID' : [1, 5],
+        'NUCID' : [ 1,  5],
     },
     'Q-VALUE'                  : {
-        'NUCID' : [1, 5],
+        'NUCID' : [ 1,  5],
+        'Q'     : [ 8,  8],
+        'Q-'    : [10, 19],
+        'DQ-'   : [20, 21],
+        'SN'    : [22, 29],
+        'DSN'   : [30, 31],
+        'SP'    : [32, 39],
+        'DSP'   : [40, 41],
+        'QA'    : [42, 49],
+        'DQA'   : [50, 55],
+        'QREF'  : [56, 80],
     },
     'CROSS-REFERENCE'          : {
         'NUCID' : [1, 5],
@@ -51,8 +61,27 @@ RECORD_MEMBERS = {
         'NUCID' : [1, 5],
     },
     'REFERENCE'                : {
-        'MASS'  : [1, 3],
+        'MASS_NUMBER'  : [1, 3],
     },
     'END'                      : {},
+}
+
+# According to Chapter V in ENSDF manual these
+# are the field formats defined as regular expressions
+# since a field can have multiple formats which differ
+# in character positioning (unlike records!).
+digit = '[0-9]'
+FIELDS = {
+    'NUCID' : {
+        'MASS_NUMBER' : [1, 3]
+        'Z'           : [4, 5]
+    },
+    'DSID'  : {
+        'REFERENCES'               : {},
+        'COMMENTS'                 : {},
+        'ADOPTED LEVELS'           : {},
+        'ADOPTED LEVELS, GAMMAS'   : {},
+
+    }
 }
 
