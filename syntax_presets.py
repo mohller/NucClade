@@ -10,7 +10,7 @@ RECORD_MEMBERS = {
         'DSREF' : [40, 65],
         'PUB'   : [66, 74],
         'DATE'  : [75, 80],
-    }
+    },
     'HISTORY'                  : {
         'NUCID' : [ 1,  5],
     },
@@ -73,14 +73,24 @@ RECORD_MEMBERS = {
 digit = '[0-9]'
 FIELDS = {
     'NUCID' : {
-        'MASS_NUMBER' : [1, 3]
+        'MASS_NUMBER' : [1, 3],
         'Z'           : [4, 5]
     },
     'DSID'  : {
-        'REFERENCES'               : {},
-        'COMMENTS'                 : {},
-        'ADOPTED LEVELS'           : {},
-        'ADOPTED LEVELS, GAMMAS'   : {},
+        'REFERENCES'               : r'REFERENCES',
+        'COMMENTS'                 : r'COMMENTS',
+        'ADOPTED LEVELS'           : [
+            r'ADOPTED LEVELS',
+            r'ADOPTED LEVELS, GAMMAS'
+        ],
+        'DECAYS'                   : [
+            r'(\d{1,3})(\w{1,2})(\[\+\d{1,}\]){0,1} ([\w,+,-]*) DECAY( \(.*\)){0,1}',
+            r'MUONIC ATOM'
+        ],
+        'REACTIONS'                : [
+            '(HI,XNG)', 
+            'COULOMB EXCITATION'
+        ]
 
     }
 }

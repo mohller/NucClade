@@ -81,7 +81,7 @@ def classify_record(record_string):
 
     return record_type
 
-def classify_dataset(dataset_object):
+def classify_dataset(dsid_string):
     """Datasets can be classified into 5 types according to the 
        information they present (see ENSDF manual page 3). Here
        those types are tagged as:
@@ -93,14 +93,18 @@ def classify_dataset(dataset_object):
            'COMBINED_VALS'
         ]
     """
-    rtypes = []
-    dataset_type = 'OTHER'
-    for r in dataset_object.records[1:-1]:
-        rtypes.append(r.type)
-    
-    if np.all(np.array(rtypes) == 'REFERENCE'):
-        dataset_type = 'THE_REFERENCE'
-    
+    dataset_type = ''
+    for k, v in FIELDS['DSID'].iteritems():
+        if isinstance(v, list):
+            field_re = re.compile(r'|'.join(v))
+        else:
+            field_re = re.compile(v)
+        # print k, v
+        match = field_re.match(dsid_string)
+        if match:
+            dataset_type = k
+            break
+
     return dataset_type
 
 
