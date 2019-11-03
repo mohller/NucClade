@@ -6,7 +6,7 @@
 RECORD_MEMBERS = {
     'IDENTIFICATION'           : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
         'DSID'  : [10, 39],
         'DSREF' : [40, 65],
         'PUB'   : [66, 74],
@@ -14,11 +14,11 @@ RECORD_MEMBERS = {
     },
     'HISTORY'                  : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'Q-VALUE'                  : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
         'Q_'    : [10, 19],
         'DQ_'   : [20, 21],
         'SN'    : [22, 29],
@@ -31,27 +31,27 @@ RECORD_MEMBERS = {
     },
     'CROSS-REFERENCE'          : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'COMMENT'                  : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'PARENT'                   : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'NORMALIZATION'            : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'PRODUCTION NORMALIZATION' : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'LEVEL'                    : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
         'E'     : [10, 19],
         'DE'    : [20, 21],
         'J'     : [22, 39],
@@ -65,27 +65,27 @@ RECORD_MEMBERS = {
     },
     'BETA MINUS'               : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'EC / BETA PLUS'           : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'ALPHA'                    : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'DELAYED PARTICLE'         : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'GAMMA'                    : {
         'NUCID' : [ 1,  5],
-        'RID'   : [ 8,  8],
+        'RID'   : [ 6,  8],
     },
     'REFERENCE'                : {
         'MASS_NUMBER'  : [ 1,  3],
-        'RID'          : [ 8,  8],
+        'RID'          : [ 6,  8],
     },
     'END'                      : {},
 }
@@ -97,19 +97,19 @@ RECORD_MEMBERS = {
 digit = '[0-9]'
 FIELDS = {
     'RID'   : {
-        'HISTORY'                  : 'H', 
-        'Q-VALUE'                  : 'Q', 
-        'CROSS-REFERENCE'          : 'X', 
-        'PARENT'                   : 'P', 
-        'NORMALIZATION'            : 'N', 
-        'PRODUCTION NORMALIZATION' : 'PN',
-        'LEVEL'                    : 'L', 
-        'BETA MINUS'               : 'B', 
-        'EC / BETA PLUS'           : 'E', 
-        'ALPHA'                    : 'A', 
-        'DELAYED PARTICLE'         : 'D', 
-        'GAMMA'                    : 'G', 
-        'REFERENCE'                : 'R',   
+        'HISTORY'                  : r'  H', 
+        'Q-VALUE'                  : r'  Q', 
+        'CROSS-REFERENCE'          : r'  X', 
+        'PARENT'                   : r'  P', 
+        'NORMALIZATION'            : r'  N', 
+        'PRODUCTION NORMALIZATION' : r' PN',
+        'LEVEL'                    : r'  L', 
+        'BETA MINUS'               : r'  B', 
+        'EC / BETA PLUS'           : r'  E', 
+        'ALPHA'                    : r'  A', 
+        'DELAYED PARTICLE'         : r'  D', 
+        'GAMMA'                    : r'  G', 
+        'REFERENCE'                : r'  R',   
     },
     'NUCID' : {
         'MASS_NUMBER' : [1, 3],

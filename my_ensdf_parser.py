@@ -61,7 +61,7 @@ def classify_record(record_string):
     """
     record_type = None
     for key, val in FIELDS['RID'].iteritems():
-        if record_string[7] == val:
+        if record_string[5:8] == val:
             record_type = key
 
     if record_type is None:
