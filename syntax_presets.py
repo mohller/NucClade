@@ -123,7 +123,7 @@ FIELDS = {
             r'ADOPTED LEVELS, GAMMAS'
         ],
         'DECAYS'                   : [
-            r'(\d{1,3})(\w{1,2})(\[\+\d{1,}\]){0,1} ([\w,+,-]*) DECAY( \(.*\)){0,1}',
+            r'(?P<A>\d{1,3})(?P<Sym>\w{1,2})(\[\+\d{1,}\]){0,1} (?P<mode>[\w,+,-]*) DECAY( \()?(?P<T>[\d,\.,E,+,-]*){0,1}\s?(?P<U>[Y,D,M,U,N,K,P,A,F,S,E,V]{0,3})\)?',
             r'MUONIC ATOM'
         ],
         'REACTIONS'                : [
