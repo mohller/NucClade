@@ -60,40 +60,20 @@ def classify_record(record_string):
     on syntax_presets
     """
     record_type = None
-    if record_string[7] == 'H':
-        record_type = 'HISTORY'
-    elif record_string[7] == 'Q':
-        record_type = 'Q-VALUE'
-    elif record_string[7] == 'X':
-        record_type = 'CROSS-REFERENCE'
-    elif record_string[7] == 'P':
-        record_type = 'PARENT'
-    elif record_string[7] == 'N':
-        record_type = 'NORMALIZATION'
-        if record_string[5:7] == 'PN':
-            record_type = 'PRODUCTION NORMALIZATION'
-    elif record_string[7] == 'L':
-        record_type = 'LEVEL'
-    elif record_string[7] == 'B':
-        record_type = 'BETA MINUS'
-    elif record_string[7] == 'E':
-        record_type = 'EC / BETA PLUS'
-    elif record_string[7] == 'A':
-        record_type = 'ALPHA'
-    elif record_string[7] == 'D':
-        record_type = 'DELAYED PARTICLE'
-    elif record_string[7] == 'G':
-        record_type = 'GAMMA'
-    elif record_string[7] == 'R':
-        record_type = 'REFERENCE'
-    elif record_string[6] in ['c', 'd', 't', 'C', 'D', 'T']:
-        record_type = 'COMMENT'
-    elif record_string == END_RECORD:
-        record_type = 'END'
-    elif record_string[6:9] == 3 * r' ':
-        record_type = 'IDENTIFICATION'
-    else:
-        warn('Record not within expected types!\n......{}\n'.format(record_string))
+    for key, val in FIELDS['RID'].iteritems():
+        if record_string[7] == val:
+            record_type = key
+
+    if record_type is None:
+        if record_string[6] in ['c', 'd', 't', 'C', 'D', 'T']:
+            record_type = 'COMMENT'
+        elif record_string == END_RECORD:
+            record_type = 'END'
+        elif record_string[6:9] == 3 * r' ':
+            record_type = 'IDENTIFICATION'
+        else:
+            # warn('Record not within expected types!\n......{}\n'.format(record_string))
+            pass
 
     return record_type
 
@@ -120,7 +100,7 @@ def classify_dataset(dsid_string):
         if match:
             dataset_type = k
             break
-        
+
     return dataset_type, match
 
 
