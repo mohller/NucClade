@@ -56,6 +56,8 @@ def is_dataset(string):
 def classify_record(record_string):
     """Identifies the record type from one of the 15 different
     types defined in ENSDF manual
+    TODO: change into form of classify_dataset based
+    on syntax_presets
     """
     record_type = None
     if record_string[7] == 'H':
@@ -107,17 +109,19 @@ def classify_dataset(dsid_string):
            'COMBINED_VALS'
         ]
     """
-    dataset_type = ''
+    dataset_type = 'UNKNOWN'
     for k, v in FIELDS['DSID'].iteritems():
         if isinstance(v, list):
             field_re = re.compile(r'|'.join(v))
         else:
             field_re = re.compile(v)
-        # print k, v
+
         match = field_re.match(dsid_string)
         if match:
             dataset_type = k
             break
+        
+    return dataset_type, match
 
 
 class record_group(object):
@@ -143,12 +147,11 @@ class record_group(object):
         self._populate_data()
 
     def _populate_data(self):
-        # extracting data based on type
-        if self.type == 'IDENTIFICATION':
-            self.DSID = self.record_raw[9:39]  # Dataset Identification
-            self.DSREF = self.record_raw[39:65]  # References
-            self.PUB = self.record_raw[65:74]  # Publication Information
-            self.DATE = self.record_raw[75:80]  # Publication Information                
+        if self.type:
+            rtype = self.type
+            for field, lim_idcs in RECORD_MEMBERS[rtype].iteritems():
+                i1, i2 = lim_idcs[0] - 1, lim_idcs[1]
+                self.__setattr__(field, self.record_raw[i1:i2])
 
 
 class dataset(object):
@@ -207,9 +210,11 @@ class dataset(object):
                 prev_type = new_type
                 prev_record = new_record                
         
-        # self.type = classify_dataset(self)
-        if 'DECAY' in self.records[0].DSID:
-            self.type = 'DECAY'
+        self.A = int(self.records[0].record_raw[:3].strip())
+        self.elem = self.records[0].record_raw[3:5].strip()
+        self.Z = get_atomic_number(self.elem)
+        
+        self.type, _ = classify_dataset(self.records[0].DSID)
 
 
 class ensdf_file(object):
@@ -217,7 +222,7 @@ class ensdf_file(object):
     a file in the format of ENSDF. 
     """
     def __init__(self, ensdfname):
-            code_name = 'utf-8'  # closest to ASCII-7 used in ENSDF, python3
+            # code_name = 'utf-8'  # closest to ASCII-7 used in ENSDF, python3
 
             # with open(ensdfname, 'rt', encoding=code_name) as f:  # for python3
             with open(ensdfname, 'rt') as f:
@@ -239,17 +244,6 @@ if __name__ == "__main__":
     folder = '/home/visitante/decay_tools/ENSDF/'
     ef = ensdf_file('ensdf.039')
     import numpy as np
-    import periodictable as ptb
+    import diagnostics
 
-    modes = []
-    data = DECAY_MODES
-    for k in range(1, 299):
-        filename = 'ensdf.{:0>3d}'.format(k)
-        ef = ensdf_file(folder + filename)
-
-        for ds in ef.datasets:
-            if ds.type == "DECAY":
-                nuclide, mode, _,  = ds.records[0].DSID.split(u' ')[1]
-                if mode not in DECAY_MODES:
-                    modes.append(m)
-    print(modes)
+    print diagnostics.check_decay_types()
