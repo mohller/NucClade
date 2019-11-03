@@ -19,7 +19,21 @@ DECAY_MODES = ['A', 'B+', '2B+', 'B+A', 'B+P', 'B+2P', 'B+3P',
                'N', '2N', 'P', '2P', 'SF', '14C']
 
 import numpy as np
+import re
 from warnings import warn
+from syntax_presets import *
+from nuclei_data import nuclide_data
+
+def get_atomic_number(symbol):
+    """Returns the atomic number of an atomic element
+    with symbol given by the parameter symbol of type string.
+    """
+    Z = 0
+    for k, s in enumerate(nuclide_data['symbols']):
+        if s.lower() == symbol.lower():
+            Z = k
+            break
+    return Z
 
 def dismember(string, markers, names=None):
     """Decompose string into size-limited fragments
@@ -105,8 +119,6 @@ def classify_dataset(dsid_string):
             dataset_type = k
             break
 
-    return dataset_type
-
 
 class record_group(object):
     """A class to represent a group of records which
@@ -180,7 +192,7 @@ class dataset(object):
         prev_record = rs_lines_list[0]
         for rec in rs_lines_list[1:]:
             if rec == '':
-                # Residual from split
+                # Residual from split, elliminate in future
                 rec = 80 * u' '
 
             new_record = rec + u'\n'
