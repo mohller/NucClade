@@ -153,6 +153,12 @@ class record_group(object):
                 i1, i2 = lim_idcs[0] - 1, lim_idcs[1]
                 self.__setattr__(field, self.record_raw[i1:i2])
 
+    def __iter__(self):
+        rtype = self.type
+        for attr, value in self.__dict__.iteritems():
+            if attr in RECORD_MEMBERS[rtype]:
+                yield attr, value
+
 
 class dataset(object):
     """A class that represents the datasets contained in ENSDF
