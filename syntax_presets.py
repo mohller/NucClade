@@ -6,7 +6,8 @@
 RECORD_MEMBERS = {
     'IDENTIFICATION'           : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'DSID'        : [10, 39],
         'DSREF'       : [40, 65],
         'PUB'         : [66, 74],
@@ -14,12 +15,14 @@ RECORD_MEMBERS = {
     },
     'HISTORY'                  : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'History'     : [10, 80],
     },
     'Q-VALUE'                  : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'Q_'          : [10, 19],
         'DQ_'         : [20, 21],
         'SN'          : [22, 29],
@@ -32,20 +35,23 @@ RECORD_MEMBERS = {
     },
     'CROSS-REFERENCE'          : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'DSSYM'       : [ 9,  9],
         'DSID'        : [10, 39],
     },
     'COMMENT'                  : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'RTYPE'       : [ 8,  8],
         'PSYM'        : [ 9,  9],
         'CTEXT'       : [10, 80],
     },
     'PARENT'                   : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'J'           : [22, 39],
@@ -71,7 +77,8 @@ RECORD_MEMBERS = {
     },
     'PRODUCTION NORMALIZATION' : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'NRxBR'       : [10, 19],
         'UNC1'        : [20, 21],
         'NTxBR'       : [22, 29],
@@ -84,7 +91,8 @@ RECORD_MEMBERS = {
     },
     'LEVEL'                    : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'J'           : [22, 39],
@@ -98,7 +106,8 @@ RECORD_MEMBERS = {
     },
     'BETA MINUS'               : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'IB'          : [22, 29],
@@ -111,7 +120,8 @@ RECORD_MEMBERS = {
     },
     'EC / BETA PLUS'           : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'IB'          : [22, 29],
@@ -128,7 +138,8 @@ RECORD_MEMBERS = {
     },
     'ALPHA'                    : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'IA'          : [22, 29],
@@ -140,7 +151,8 @@ RECORD_MEMBERS = {
     },
     'DELAYED PARTICLE'         : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'IP'          : [22, 29],
@@ -155,7 +167,8 @@ RECORD_MEMBERS = {
     },
     'GAMMA'                    : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'E'           : [10, 19],
         'DE'          : [20, 21],
         'RI'          : [22, 29],
@@ -173,7 +186,8 @@ RECORD_MEMBERS = {
     },
     'REFERENCE'                : {
         'MASS_NUMBER' : [ 1,  3],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
     },
     'END'                      : {
         'BLANK'       : [ 1, 80]
