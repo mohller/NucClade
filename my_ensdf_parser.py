@@ -18,10 +18,10 @@ DECAY_MODES = ['A', 'B+', '2B+', 'B+A', 'B+P', 'B+2P', 'B+3P',
                'EC', '2EC', 'ECP', 'EC2P', 'ECA', 'EC3P', 'IT', 
                'N', '2N', 'P', '2P', 'SF', '14C']
 
-import numpy as np
 import re
+import numpy as np
 from warnings import warn
-from syntax_presets import *
+from syntax_presets import RECORD_MEMBERS, FIELDS
 from nuclei_data import nuclide_data
 
 def get_atomic_number(symbol):
@@ -108,6 +108,8 @@ class record_group(object):
     """A class to represent a group of records which
     are records as in ENSDF manual which belong to the
     the same type and are contiguous in the file.
+    TODO: make compatible with two records of different types
+    like LEVEL+B- records which always come toghether
     """
     def __init__(self, record_string, recordstype=None):
         """Receives the record in string format (80 character string)
@@ -174,14 +176,14 @@ class dataset(object):
         self.type = ''  # the type of dataset (1 of 5)
 
         # parse string and build list of records, group records 
-        record_string = ''
         rs_lines_list = self.dataset_raw.split(u'\n')
 
         prev_type = 'IDENTIFICATION'  # all datasets start with this record type
         prev_record = rs_lines_list[0]
+        record_string = prev_record + u'\n'
         for rec in rs_lines_list[1:]:
             if rec == '':
-                # Residual from split, elliminate in future
+                # Residual from split, eliminate in future
                 rec = 80 * u' '
 
             new_record = rec + u'\n'
@@ -190,11 +192,13 @@ class dataset(object):
             if (new_type == prev_type) and (new_record[5] > prev_record[5]):
                 # If it is a continuation record, char in pos 5
                 # should be any of (1..9, a..z)
+                # TODO: a group can be interjected by a comment, and this is not taken into account atm.... fix it
                 record_string += new_record
             else:
-                self.records.append(record_group(prev_record, recordstype=prev_type))
+                self.records.append(record_group(record_string, recordstype=prev_type))
                 prev_type = new_type
-                prev_record = new_record                
+                prev_record = new_record
+                record_string = prev_record + u'\n'             
         
         self.A = int(self.records[0].record_raw[:3].strip())
         self.elem = self.records[0].record_raw[3:5].strip()
@@ -221,7 +225,8 @@ class ensdf_file(object):
                     # EOF reached
                     continue
                 
-                ds = dataset(dataset_string + END_RECORD, None)
+                # ds = dataset(dataset_string + END_RECORD, None)
+                ds = dataset(dataset_string, None)
                 
                 self.datasets.append(ds)
 

@@ -63,7 +63,8 @@ RECORD_MEMBERS = {
     },
     'NORMALIZATION'            : {
         'NUCID'       : [ 1,  5],
-        'RID'         : [ 6,  8],
+        'Additional'  : [ 6,  6],
+        'RID'         : [ 7,  8],
         'NR'          : [10, 19],
         'DNR'         : [20, 21],
         'NT'          : [22, 29],
