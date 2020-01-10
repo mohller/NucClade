@@ -195,11 +195,13 @@ RECORD_MEMBERS = {
     }
 }
 
-# According to Chapter V in ENSDF manual these
-# are the field formats defined as regular expressions
-# since a field can have multiple formats which differ
-# in character positioning (unlike records!).
-digit = '[0-9]'
+# According to Chapter V in ENSDF manual these below
+# are the field formats. Here they are defined as 
+# regular expressions since a field can have 
+# multiple formats which differ in character 
+# positioning (unlike records!).
+NUM = r'\d*[\d,\.,E,+,-]*'  # defined as unsigned number e.g. 345, 345.34, 23.E+9, etc
+# TODO: Check RTYPE field and similarity to RID
 FIELDS = {
     'RID'   : {
         'HISTORY'                  : r'  H', 
@@ -237,7 +239,28 @@ FIELDS = {
         ]
     },
     'T'     : [
-        r'(?P<T>[\d,\.,E,+,-]*){0,1}\s?(?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{0,3})\)?',
-        'STABLE']
+        r'(?P<T>{}){0,1}\s?(?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{0,3})\)?'.format(NUM),
+        'STABLE'],
+    'E'     : [
+        r'\(?[A-Z]?\+?{}\+?[A-Z]?\)?'.format(NUM),
+        r'{}\+{}'.format(r'[\d,\.,E,+,-]*', NUM)
+        ],
 }
 
+# Adding other field formats by groups...
+for key in ['BR','CC','HF','LOGFT','NB','NP','NR','NT','QP']:
+    FIELDS[key] = [NUM,]
+
+for key in ['DBR','DCC','DE','DHF','DIA','DIB','DIE','DIP','DNB']:
+    # these are two-character fields
+    FIELDS[key] = [r'([\h*,\d*]{2})', 'LT', 'GT', 'LE', 'GE', 'AP', 'CA', 'SY']
+
+for key in ['MR','Q-','QA','SN','SP']:
+    FIELDS[key] = [r'[\d,\.,E,+,-]*',]
+
+for key in ['DFT','DMR','DT','DNB','DQA']:
+    # uncertainties, either asymmetric or symmetric
+    FIELDS[key] = [r'\+(\d+)\-(\d+)', r'([\h*,\d*]{2})', 'LT', 'GT', 'LE', 'GE', 'AP', 'CA', 'SY']
+
+for key in ['IA','IB','IE','IP','RI','TI']:
+    FIELDS[key] = [NUM, r'\(?{}\)?'.format(NUM)]

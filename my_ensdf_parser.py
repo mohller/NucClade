@@ -190,6 +190,8 @@ class dataset(object):
             new_type = classify_record(new_record)
             
             if (new_type == prev_type) and (new_record[5] > prev_record[5]):
+                # For records that support continuation which are some comments and 
+                # the records [IDENTIFICATION, HISTORY, PARENT, NORMALIZATION].
                 # If it is a continuation record, char in pos 5
                 # should be any of (1..9, a..z)
                 # TODO: a group can be interjected by a comment, and this is not taken into account atm.... fix it
@@ -217,6 +219,8 @@ class ensdf_file(object):
             # with open(ensdfname, 'rt', encoding=code_name) as f:  # for python3
             with open(ensdfname, 'rt') as f:
                 s = f.read()
+
+            self.filename = ensdfname
 
             self.datasets = []
             split_datasets = s.split(END_RECORD)
