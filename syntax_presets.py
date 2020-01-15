@@ -239,7 +239,7 @@ FIELDS = {
         ]
     },
     'T'     : [
-        r'(?P<T>{}){0,1}\s?(?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{0,3})\)?'.format(NUM),
+        r'\(?P<T>{}\){{0,1}}\s?\(?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{{0,3}})\)?'.format(NUM),
         'STABLE'],
     'E'     : [
         r'\(?[A-Z]?\+?{}\+?[A-Z]?\)?'.format(NUM),
@@ -251,11 +251,11 @@ FIELDS = {
 for key in ['BR','CC','HF','LOGFT','NB','NP','NR','NT','QP']:
     FIELDS[key] = [NUM,]
 
-for key in ['DBR','DCC','DE','DHF','DIA','DIB','DIE','DIP','DNB']:
+for key in ['DBR','DCC','DE','DHF','DIA','DIB','DIE','DIP','DNB','DNR','DNP','DNT','DQP','DQ_','DS','DSP','DTI']:
     # these are two-character fields
     FIELDS[key] = [r'([\h*,\d*]{2})', 'LT', 'GT', 'LE', 'GE', 'AP', 'CA', 'SY']
 
-for key in ['MR','Q-','QA','SN','SP']:
+for key in ['MR','Q_','QA','SN','SP']:
     FIELDS[key] = [r'[\d,\.,E,+,-]*',]
 
 for key in ['DFT','DMR','DT','DNB','DQA']:
