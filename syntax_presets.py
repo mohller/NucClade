@@ -200,7 +200,7 @@ RECORD_MEMBERS = {
 # regular expressions since a field can have 
 # multiple formats which differ in character 
 # positioning (unlike records!).
-NUM = r'\d*[\d,\.,E,+,-]*'  # defined as unsigned number e.g. 345, 345.34, 23.E+9, etc
+NUM = r'\d+[\d,\.,E,+,-]*'  # defined as unsigned number e.g. 345, 345.34, 23.E+9, etc
 # TODO: Check RTYPE field and similarity to RID
 FIELDS = {
     'RID'   : {
@@ -240,11 +240,10 @@ FIELDS = {
     },
     'T'     : [
         r'\s*(STABLE)\s*',
-        r'(?P<T>{}) (?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{{0,3}})'.format(NUM),
+        r'\s*(?P<T>{}) (?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{{0,3}})\s*'.format(NUM),
         ],
     'E'     : [
-        r'\(?[A-Z]?\+?{}\+?[A-Z]?\)?'.format(NUM),
-        r'{}\+{}'.format(r'[\d,\.,E,+,-]*', NUM)
+        r'\s*([\+-]?SN|[\+-]?SP|[\+-]?[A-Z]|[\+-]?[\d.]+(?:E\+|E-|E)?\d*)([\+-]?SN|[\+-]?SP|[\+-]?[A-Z]|[\+-]?[\d.]+(?:E\+|E-|E)?\d*)?\s*',
         ],
 }
 

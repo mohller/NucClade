@@ -168,7 +168,12 @@ class record_group(object):
                 if fieldname in field_converters:
                     regex = r'|'.join(FIELDS[fieldname])
                     match = re.match(regex, substring)
-                    value = field_converters[fieldname](*match.groups())
+                    # if rtype == 'LEVEL':
+                    #     print substring
+                    if match:
+                        value = field_converters[fieldname](*match.groups())
+                    else:
+                        value = None
                     self.__setattr__(fieldname, value)
                 else:
                     self.__setattr__(fieldname, substring)
