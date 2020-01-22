@@ -1,6 +1,6 @@
 """Syntax and settings defined in ENSDF manual
 """
-
+from field_converters import *
 # According to Chapter III in ENSDF manual these
 # are the standard one card record formats
 RECORD_MEMBERS = {
@@ -239,8 +239,9 @@ FIELDS = {
         ]
     },
     'T'     : [
-        r'\(?P<T>{}\){{0,1}}\s?\(?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{{0,3}})\)?'.format(NUM),
-        'STABLE'],
+        r'\s*(STABLE)\s*',
+        r'(?P<T>{}) (?P<U>[Y,D,H,M,U,N,K,P,A,F,S,E,V]{{0,3}})'.format(NUM),
+        ],
     'E'     : [
         r'\(?[A-Z]?\+?{}\+?[A-Z]?\)?'.format(NUM),
         r'{}\+{}'.format(r'[\d,\.,E,+,-]*', NUM)
@@ -264,3 +265,6 @@ for key in ['DFT','DMR','DT','DNB','DQA']:
 
 for key in ['IA','IB','IE','IP','RI','TI']:
     FIELDS[key] = [NUM, r'\(?{}\)?'.format(NUM)]
+
+
+# Defining field converters

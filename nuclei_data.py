@@ -35,3 +35,5 @@ nuclide_data = {
                  '(Ununtrium)', 'Flerovium', '(Ununpentium)', 'Livermorium', 
                  '(Ununseptium)', '(Ununoctium)']
 }
+
+# load masses from mass table numas2016

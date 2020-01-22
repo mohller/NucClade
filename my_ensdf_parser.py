@@ -21,8 +21,17 @@ DECAY_MODES = ['A', 'B+', '2B+', 'B+A', 'B+P', 'B+2P', 'B+3P',
 import re
 import numpy as np
 from warnings import warn
-from syntax_presets import RECORD_MEMBERS, FIELDS
+from syntax_presets import RECORD_MEMBERS, FIELDS, field_converters
 from nuclei_data import nuclide_data
+
+ENSDF_datafile = '/home/visitante/decay_tools/ENSDF_2019.hdf5'
+
+def tofloat(thestring):
+    try:
+        val = float(thestring)
+        return val
+    except:
+        return 0
 
 def get_atomic_number(symbol):
     """Returns the atomic number of an atomic element
@@ -104,6 +113,24 @@ def classify_dataset(dsid_string):
     return dataset_type, match
 
 
+# def get_decay_data(A, Z):
+#     """Parse the relevant ENSDF file from the database and 
+#     return an object with the relevant decay data.
+#     """
+
+#     # parse ENSDF with the correct A and extract datasets of 
+#     # the nuclide requested....
+#     filename = 'ensdf.{:0>3d}'.format(A)
+#     with h5py.File(ENSDF_datafile, 'r') as ensdf:
+#         ensdf_obj = ensdf_file(ensdf[filename])
+
+#     for ds in ensdf_obj.datasets:
+#         if (ds.A == A) and (ds.Z == Z):
+#             pass
+
+#     # parse ENSDF files with A<= to get its decay levels if 
+#     # the nuclide has decays
+
 class record_group(object):
     """A class to represent a group of records which
     are records as in ENSDF manual which belong to the
@@ -129,11 +156,22 @@ class record_group(object):
         self._populate_data()
 
     def _populate_data(self):
+        """Extracts info from record based on the record
+        syntax defined in syntax_presets.py
+        """
         if self.type:
             rtype = self.type
-            for field, lim_idcs in RECORD_MEMBERS[rtype].iteritems():
-                i1, i2 = lim_idcs[0] - 1, lim_idcs[1]
-                self.__setattr__(field, self.record_raw[i1:i2])
+            for fieldname, limit_pos in RECORD_MEMBERS[rtype].iteritems():
+                i1, i2 = limit_pos[0] - 1, limit_pos[1]
+                substring = self.record_raw[i1:i2]
+                # if fieldname in FIELDS:  TODO: needs extending the field converters
+                if fieldname in field_converters:
+                    regex = r'|'.join(FIELDS[fieldname])
+                    match = re.match(regex, substring)
+                    value = field_converters[fieldname](*match.groups())
+                    self.__setattr__(fieldname, value)
+                else:
+                    self.__setattr__(fieldname, substring)
 
     def __iter__(self):
         rtype = self.type
@@ -213,17 +251,13 @@ class ensdf_file(object):
     """A class to represent and contain the information of
     a file in the format of ENSDF. 
     """
-    def __init__(self, ensdfname):
+    def __init__(self, ensdf):
             # code_name = 'utf-8'  # closest to ASCII-7 used in ENSDF, python3
 
-            # with open(ensdfname, 'rt', encoding=code_name) as f:  # for python3
-            with open(ensdfname, 'rt') as f:
-                s = f.read()
-
-            self.filename = ensdfname
+            self.filename = ensdf.name
 
             self.datasets = []
-            split_datasets = s.split(END_RECORD)
+            split_datasets = ensdf.value.split(END_RECORD)
             for dataset_string in split_datasets:
                 if dataset_string == u'':
                     # EOF reached
