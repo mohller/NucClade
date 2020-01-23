@@ -47,7 +47,7 @@ def convert_time(stable, val, units):
 def convert_energy(e1, e2):
     """Function to convert the values read from field E
     as defined in the ENSDF manual (section V.18).
-    Returns the time in seconds.
+    Returns the energy in keV.
     """
     import re
 
@@ -56,7 +56,7 @@ def convert_energy(e1, e2):
     elif not re.search('[A-DF-Z]', e1):
         val1 = float(e1)
     else:
-        val1 = complex(0, sum(ord(l) for l in e1.lstrip() if l not in '+-'))
+        val1 = complex(0, sum(ord(l) for l in e1.strip() if l not in '+-'))
         if '-' in e1:
             val1 *= -1
 
@@ -65,15 +65,32 @@ def convert_energy(e1, e2):
     elif not re.search('[A-DF-Z]', e2):
         val2 = float(e2)
     else:
-        val2 = complex(0, sum(ord(l) for l in e2.lstrip() if l not in '+-'))
+        val2 = complex(0, sum(ord(l) for l in e2.strip() if l not in '+-'))
         if '-' in e2:
             val2 *= -1
 
     return val1 + val2
 
 
+def tofloat(val):
+    """Function to convert the values read from 
+    several fields as defined in the ENSDF manual 
+    (section V.14). 
+    Returns the energy value in keV.
+    """
+    if val.strip():
+        return float(val)
+    else:
+        return 0
+
 field_converters = {
     'E' : convert_energy,
     'T' : convert_time
     
 }
+
+for key in ['MR','Q_','QA','SN','SP']:
+    field_converters[key] = tofloat
+
+for key in ['IA','IB','IE','IP','RI','TI']:
+    field_converters[key] = tofloat

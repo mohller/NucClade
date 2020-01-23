@@ -167,9 +167,7 @@ class record_group(object):
                 # if fieldname in FIELDS:  TODO: needs extending the field converters
                 if fieldname in field_converters:
                     regex = r'|'.join(FIELDS[fieldname])
-                    match = re.match(regex, substring)
-                    # if rtype == 'LEVEL':
-                    #     print substring
+                    match = re.search(regex, substring)
                     if match:
                         value = field_converters[fieldname](*match.groups())
                     else:

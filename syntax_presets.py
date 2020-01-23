@@ -256,14 +256,14 @@ for key in ['DBR','DCC','DE','DHF','DIA','DIB','DIE','DIP','DNB','DNR','DNP','DN
     FIELDS[key] = [r'([\h*,\d*]{2})', 'LT', 'GT', 'LE', 'GE', 'AP', 'CA', 'SY']
 
 for key in ['MR','Q_','QA','SN','SP']:
-    FIELDS[key] = [r'[\d,\.,E,+,-]*',]
+    FIELDS[key] = [r'(-?{})'.format(NUM),]
 
 for key in ['DFT','DMR','DT','DNB','DQA']:
     # uncertainties, either asymmetric or symmetric
     FIELDS[key] = [r'\+(\d+)\-(\d+)', r'([\h*,\d*]{2})', 'LT', 'GT', 'LE', 'GE', 'AP', 'CA', 'SY']
 
 for key in ['IA','IB','IE','IP','RI','TI']:
-    FIELDS[key] = [NUM, r'\(?{}\)?'.format(NUM)]
+    FIELDS[key] = [r'\(?({})\)?'.format(NUM),]
 
 
 # Defining field converters
